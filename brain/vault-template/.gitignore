@@ -1,0 +1,37 @@
+# Python artifacts
+__pycache__/
+*.pyc
+
+# Credentials and session history: never enter the vault
+.credentials.json
+*.credentials*
+settings.local.json
+*.local.json
+*.jsonl
+
+# Secret files
+.env
+*.env
+*.key
+*.pem
+*.p12
+*.keystore
+
+# Logs and working leftovers
+*.log
+logs/
+.state/
+
+# Obsidian: machine-specific, changes constantly
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/graph.json
+.obsidian/cache
+.trash/
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# claude.ai skill sync cache: rewritten per machine
+runtime/skills/synced/

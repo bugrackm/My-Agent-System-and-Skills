@@ -1,0 +1,1 @@
+{ "name": "context-meter", "version": "0.2.1", "description": "Shows the active session's context usage in the line under the prompt (e.g. ctx █████░░░░░ 100k/200k · 50%)", "types": "./types/index.d.ts" }

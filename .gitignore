@@ -1,0 +1,14 @@
+# Local-only list of personal terms checked by scripts/check-public.sh
+.public-blocklist
+
+# OS / editor
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Python / Node
+__pycache__/
+*.pyc
+node_modules/
+dist/

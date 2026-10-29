@@ -1,0 +1,14 @@
+{
+  "name": "my-agent-system",
+  "owner": { "name": "bugrackm" },
+  "metadata": {
+    "description": "Agent system, brain and skills for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "context-meter",
+      "source": "./skills/context-meter",
+      "description": "Shows the active session's context usage under the prompt (e.g. ctx █████░░░░░ 100k/200k · 50%)"
+    }
+  ]
+}
