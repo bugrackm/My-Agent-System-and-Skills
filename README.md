@@ -25,12 +25,15 @@ Sadece `context-meter` plugin'ini istiyorsan:
 
 | Klasör | Ne işe yarar | Açıklama | Kurulum |
 |---|---|---|---|
-| [`brain/`](brain/) | Oturumlar arası kalıcı hafıza: Markdown vault, hook'lar, `memory-keeper` agent'ı | [README](brain/README.md) | [INSTALL](brain/INSTALL.md) |
+| [`brain/`](brain/) | Oturumlar arası kalıcı hafıza: Markdown vault, hook'lar, `memory-keeper` agent'ı (Linux/macOS) | [README](brain/README.md) | [INSTALL](brain/INSTALL.md) |
+| [`brain-windows/`](brain-windows/) | Aynı beynin Windows'a özel, bağımsız sürümü | [README](brain-windows/README.md) | [INSTALL](brain-windows/INSTALL.md) |
 | [`agents/`](agents/) | Orkestrasyon: ana model yönetir, Sonnet subagent'lar ve Codex CLI işi yapar | [README](agents/README.md) | [INSTALL](agents/INSTALL.md) |
 | [`skills/`](skills/) | `game-dev-director`, `context-meter` | [README](skills/README.md) | [INSTALL](skills/INSTALL.md) |
 | [`scripts/`](scripts/) | `check-public.sh`: yayınlamadan önce sızıntı taraması | — | — |
 
 Parçalar birbirinden bağımsız. Sadece beyni, sadece agent'ları ya da sadece bir skill'i kurabilirsin.
+
+**Windows'ta** `brain-windows/` kur. Aynı beyni Windows, Linux ve macOS'ta birlikte kullanmak istiyorsan Claude Code'u WSL içinde çalıştır ve `brain/` kur. Ayrıntılar: [brain-windows/README.md](brain-windows/README.md).
 
 ## Nasıl çalışır
 
@@ -61,7 +64,7 @@ Bu repodaki beyin bilerek **daha küçük** tutuldu: tek bir Python hook dosyas�
 ## Gereksinimler
 
 - [Claude Code](https://code.claude.com/docs)
-- Python 3.9+ ve git (beyin için)
+- Python 3.9+ ve git (beyin için; Windows'ta Python 3.10+ ve Git for Windows)
 - *İsteğe bağlı:* [Codex CLI](https://github.com/openai/codex), büyük implementasyonları devretmek için. ChatGPT aboneliğinle giriş yapılır, API anahtarı gerekmez.
 
 ## Güvenlik
@@ -104,12 +107,15 @@ If you only want the `context-meter` plugin:
 
 | Folder | Purpose | Overview | Install |
 |---|---|---|---|
-| [`brain/`](brain/) | Persistent cross-session memory: Markdown vault, hooks, `memory-keeper` agent | [README](brain/README.md) | [INSTALL](brain/INSTALL.md) |
+| [`brain/`](brain/) | Persistent cross-session memory: Markdown vault, hooks, `memory-keeper` agent (Linux/macOS) | [README](brain/README.md) | [INSTALL](brain/INSTALL.md) |
+| [`brain-windows/`](brain-windows/) | A standalone, Windows-only version of the same brain | [README](brain-windows/README.md#english) | [INSTALL](brain-windows/INSTALL.md#english) |
 | [`agents/`](agents/) | Orchestration: the main model leads, Sonnet subagents and Codex CLI do the work | [README](agents/README.md) | [INSTALL](agents/INSTALL.md) |
 | [`skills/`](skills/) | `game-dev-director`, `context-meter` | [README](skills/README.md) | [INSTALL](skills/INSTALL.md) |
 | [`scripts/`](scripts/) | `check-public.sh`: leak scan before publishing | — | — |
 
 The parts are independent. You can install only the brain, only the agents, or a single skill.
+
+**On Windows**, install `brain-windows/`. To share one brain across Windows, Linux and macOS, run Claude Code inside WSL and install `brain/`. Details: [brain-windows/README.md](brain-windows/README.md#english).
 
 ### How it works
 
@@ -140,7 +146,7 @@ The brain in this repo is **deliberately smaller**: a single Python hook file, o
 ### Requirements
 
 - [Claude Code](https://code.claude.com/docs)
-- Python 3.9+ and git (for the brain)
+- Python 3.9+ and git (for the brain; on Windows, Python 3.10+ and Git for Windows)
 - *Optional:* [Codex CLI](https://github.com/openai/codex), for delegating substantial implementation. You sign in with your ChatGPT subscription; no API key is needed.
 
 ### Security

@@ -16,13 +16,13 @@ You are an AI coding agent (Claude Code or similar) helping a user install parts
 - **Privacy.** The brain vault the user creates will hold personal data. If you create a git remote for it, it must be **private** (`gh repo create <name> --private`). Never push the vault to a public repo.
 - **No paid APIs.** Don't set up API keys. Codex CLI, if wanted, signs in with the user's ChatGPT subscription (`codex login`), and the user does that themselves.
 - **Don't run interactive logins yourself.** For `codex login` or `gh auth login`, ask the user to run them (in Claude Code, by typing `! <command>`).
-- **Platform.** The instructions target Linux and macOS shells. On Windows, use WSL, or adapt the paths and use copies instead of symlinks.
+- **Platform.** `brain/` targets Linux and macOS shells. On native Windows, install `brain-windows/` instead (PowerShell commands, copies instead of symlinks). If the user wants one brain shared across Windows, Linux and macOS, have them run Claude Code inside WSL and install `brain/` there. Never set up one vault shared between `brain-windows/` and `brain/`; see `brain-windows/README.md`. The agents and skills parts need adapted paths on Windows.
 
 ## Steps
 
 Clone the repo to a stable location (e.g. `~/src/My-Agent-System-and-Skills`) and run every command from its root.
 
-1. **Brain** (if chosen): follow [`brain/INSTALL.md`](brain/INSTALL.md#english) steps 1–8 in order.
+1. **Brain** (if chosen): follow [`brain/INSTALL.md`](brain/INSTALL.md#english) steps 1–8 in order. On native Windows, follow [`brain-windows/INSTALL.md`](brain-windows/INSTALL.md#english) instead; the same sub-rules apply (its default vault path is `%USERPROFILE%\Brain`).
    - Ask the user for the vault path; the default is `~/Documents/Brain`.
    - Stop if that path already exists.
    - Run `merge-settings.py --dry-run` first and show the user the output.

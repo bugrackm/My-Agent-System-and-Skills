@@ -1,0 +1,41 @@
+name: Brain Windows
+
+on:
+  push:
+    paths:
+      - "brain-windows/**"
+      - ".gitattributes"
+      - ".github/workflows/brain-windows.yml"
+  pull_request:
+    paths:
+      - "brain-windows/**"
+      - ".gitattributes"
+      - ".github/workflows/brain-windows.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            python: "3.10"
+          - os: windows-latest
+            python: "3.13"
+          - os: ubuntu-latest
+            python: "3.13"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Configure git identity
+        run: |
+          git config --global user.email "ci@example.invalid"
+          git config --global user.name "CI Test"
+      - name: Run brain-windows tests
+        run: python -m unittest discover -s brain-windows/runtime/tests -v

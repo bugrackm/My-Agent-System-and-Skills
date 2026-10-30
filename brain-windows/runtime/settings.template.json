@@ -1,0 +1,52 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand <SESSION_START_UTF16LE_BASE64>",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand <PROMPT_UTF16LE_BASE64>",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand <STOP_UTF16LE_BASE64>",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand <SESSION_END_UTF16LE_BASE64>",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  },
+  "env": {
+    "BRAIN_HOME": "C:/Users/<you>/Brain",
+    "BRAIN_PYTHON": "C:/Users/<you>/AppData/Local/Programs/Python/Python313/python.exe"
+  }
+}
