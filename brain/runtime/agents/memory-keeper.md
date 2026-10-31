@@ -62,9 +62,10 @@ Never write: secrets, transcripts, raw logs, diffs, project source, project
    findings that are yours to fix (your own broken links, oversize
    LAST_SESSION, journal archiving per protocol, missing frontmatter on notes
    you touched). Leave unrelated pre-existing findings alone but report ERRORs.
-2. For a vault shared across machines (optional), run
-   `git -C "$BRAIN_HOME" pull --rebase`, then commit only the vault files you
-   changed with a short English message such as `brain: update memory`, then push. Never force,
+2. For a vault shared across machines (optional), commit only the vault files
+   you changed with a short English message such as `brain: update memory`,
+   then run `git -C "$BRAIN_HOME" pull --rebase`, then push. Commit before
+   pulling: a rebase refuses to run while your edits are still unstaged. Never force,
    never reset, never rewrite history. On conflict or push failure: stop and
    report it.
 

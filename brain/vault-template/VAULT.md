@@ -120,7 +120,8 @@ If the vault is a git repository, sync it through git:
 
 - At session start: the hook runs `git pull --ff-only` (skipped when the
   branch has no upstream); it never merges or rewrites local work
-- At session end: memory-keeper runs `git pull --rebase`, commits, then pushes
+- At session end: memory-keeper commits its changes, runs `git pull --rebase`,
+  then pushes (commit first: a rebase will not run over unstaged edits)
 
 The hook can warn at session start if there is unpushed memory.
 
