@@ -4,6 +4,7 @@ description: Use for bounded external research, official-documentation lookup, t
 model: sonnet
 effort: medium
 disallowedTools: Write, Edit
+omitClaudeMd: true
 maxTurns: 15
 ---
 
@@ -18,6 +19,9 @@ Rules:
 - Do not make the final architecture/product decision for the parent.
 - Avoid broad browsing once enough evidence exists.
 - Do not paste long pages or raw search output back to the parent.
+- Open and read every source you cite; do not answer from memory. Say which
+  sources you actually opened and which you could not.
+- Never print secrets, tokens, or credential file contents.
 
 Return a compact report:
 - answer / finding;

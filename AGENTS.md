@@ -31,7 +31,7 @@ Clone the repo to a stable location (e.g. `~/src/My-Agent-System-and-Skills`) an
 2. **Agents** (if chosen): follow [`agents/INSTALL.md`](agents/INSTALL.md#english).
    - Ask which agents to install.
    - Skip `codex-runner` unless the user wants Codex CLI.
-   - For `CLAUDE.md`: if one exists, propose the sections to add and get approval. If the brain isn't installed, drop the "Brain (optional)" section and, in "Memory protocol", only the vault/memory-keeper parts (the "Keep Brain global memory compact…" and "Vault writes are delegated…" paragraphs); keep the repo-local durable-docs rules.
+   - For `CLAUDE.md`: if one exists, propose the sections to add and get approval. If the brain isn't installed, drop the whole "Brain (optional)" section (the vault and memory-keeper rules live only there); keep the other sections.
 3. **Skills** (if chosen): follow [`skills/INSTALL.md`](skills/INSTALL.md#english).
    - `game-dev-director` is copied (or symlinked) into `~/.claude/skills/`.
    - `context-meter` is a plugin. Tell the user to run the `/plugin install …` line themselves, since slash commands are typed by the user.

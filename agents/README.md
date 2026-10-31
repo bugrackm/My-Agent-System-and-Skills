@@ -22,6 +22,10 @@ Ana oturumun bağlamı değerli ve sınırlı. Bir test log'u, büyük bir `git 
 
 `memory-keeper` agent'ı beyin sistemine ait olduğu için [`brain/`](../brain/) altında duruyor.
 
+**Ne zaman devredilir?** Birkaç komutla bitecek işi ana oturum kendisi yapar. Her subagent sıfırdan başlar ve kendi kullanım hakkını harcar. Bu yüzden yalnızca sınırlı, kendi içinde tamamlanan ve çıktısı büyük işler devredilir. Paralel agent sadece gerçekten bağımsız işler için çalıştırılır.
+
+**Salt okunur agent'lar `CLAUDE.md` yüklemez.** `researcher`, `repo-explorer` ve `reviewer` dosyalarında `omitClaudeMd: true` var (Claude Code 2.1.271+). Ana oturuma yazılmış "teknik lider ol, devret" kuralları onların işi değil. İhtiyaç duydukları her kural (gizli bilgi, kapsam sınırı) ya kendi dosyalarında ya da ana oturumun verdiği görev metninde yazar.
+
 ## Codex akışı
 
 1. Ana oturum bir `CODEX_BRIEF` yazar: hedef, kapsam, kısıtlar, kabul kriterleri ve kapsam dışı işler.
@@ -40,6 +44,7 @@ Temel kurallar:
 - Açık onay olmadan yıkıcı git işlemi ya da force push yapılmaz.
 - Commit ve push yalnızca istendiğinde ve doğrulamadan sonra yapılır.
 - Test edilmemiş iş bitmiş sayılmaz.
+- Her kural tek yerde yaşar ve bir cümlelik gerekçesiyle yazılır.
 
 ---
 
@@ -69,6 +74,10 @@ The main session's context is valuable and limited. A test log, a large `git dif
 
 The `memory-keeper` agent belongs to the brain system, so it lives under [`brain/`](../brain/).
 
+**When to delegate?** The main session does work itself when a few tool calls finish it. Every subagent starts cold and spends its own usage, so only bounded, self-contained work with large output is delegated. Parallel agents are only for genuinely independent work.
+
+**Read-only agents don't load `CLAUDE.md`.** `researcher`, `repo-explorer` and `reviewer` set `omitClaudeMd: true` (Claude Code 2.1.271+). The "act as technical lead, delegate" rules written for the main session aren't their job. Any rule they need (secrets, scope limits) is in their own file or in the brief the main session gives them.
+
 ### The Codex flow
 
 1. The main session writes a `CODEX_BRIEF`: objective, scope, constraints, acceptance criteria and non-goals.
@@ -87,3 +96,4 @@ Key rules:
 - No destructive git operations or force pushes without explicit approval.
 - Commit and push only when asked, and only after verification.
 - Untested work is not finished.
+- Each rule lives in one place, with a one-line reason.

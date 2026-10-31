@@ -36,8 +36,8 @@ done
 ## 3. Global `CLAUDE.md`
 
 - **`~/.claude/CLAUDE.md` yoksa:** `cp agents/CLAUDE.md.template ~/.claude/CLAUDE.md`
-- **Varsa:** üzerine yazma. Şablondaki bölümleri ("Delegation and context preservation", "Safety / cost" vb.) kendi dosyana ekle. Bunu agent'ına yaptırıyorsan değişiklikleri önce sana göstermesini iste.
-- Beyni kurmayacaksan "Brain (optional)" bölümünü sil. "Memory protocol" bölümünde yalnızca vault/memory-keeper'a özgü kısımları ("Keep Brain global memory compact…" ve "Vault writes are delegated…" paragrafları) çıkar; repo-yerel kalıcı doküman kurallarını koru.
+- **Varsa:** üzerine yazma. Şablondaki bölümleri ("Delegation and context preservation", "Safety and cost" vb.) kendi dosyana ekle. Bunu agent'ına yaptırıyorsan değişiklikleri önce sana göstermesini iste.
+- Beyni kurmayacaksan "Brain (optional)" bölümünü tamamen sil; vault ve memory-keeper kuralları yalnızca orada. Diğer bölümlerdeki repo-yerel kalıcı doküman kuralları beyin olmadan da geçerli.
 
 ## 4. Codex CLI (isteğe bağlı)
 
@@ -95,8 +95,8 @@ done
 ### 3. Global `CLAUDE.md`
 
 - **If `~/.claude/CLAUDE.md` doesn't exist:** `cp agents/CLAUDE.md.template ~/.claude/CLAUDE.md`
-- **If it exists:** don't overwrite it. Add the template's sections ("Delegation and context preservation", "Safety / cost", etc.) to your own file. If an agent does this for you, ask it to show you the changes first.
-- If you won't install the brain, delete the "Brain (optional)" section. In "Memory protocol", remove only the vault/memory-keeper parts (the "Keep Brain global memory compact…" and "Vault writes are delegated…" paragraphs) and keep the repo-local durable-docs rules.
+- **If it exists:** don't overwrite it. Add the template's sections ("Delegation and context preservation", "Safety and cost", etc.) to your own file. If an agent does this for you, ask it to show you the changes first.
+- If you won't install the brain, delete the whole "Brain (optional)" section; the vault and memory-keeper rules live only there. The repo-local durable-docs rules in the other sections work without the brain.
 
 ### 4. Codex CLI (optional)
 

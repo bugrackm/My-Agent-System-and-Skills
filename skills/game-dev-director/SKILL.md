@@ -1,206 +1,129 @@
 ---
 name: game-dev-director
-description: Technical-director workflow for new or continuing game-development projects. Use for project recovery, requirements, research, architecture, milestone planning, implementation delegation, debugging, review, testing, handoff/state updates, and release-quality checks. Main Claude remains technical lead; bounded work goes to Sonnet subagents and substantial implementation to Codex CLI.
-compatibility: Claude Code on Linux with git. Codex CLI is optional for substantial implementation.
+description: Technical-lead workflow for new or continuing game projects. Use when choosing what to build next, placing a feature request in the right development phase, scoping or planning a milestone, setting up a prototype, playtest, or one-page design doc, deciding when art/meta/polish should come, delegating game implementation, reviewing or accepting game work, or recovering a game project's state.
+compatibility: Claude Code with git. Codex CLI is optional for substantial implementation.
 metadata:
-  version: "4.1"
+  version: "5.0"
 ---
 
-# Game Dev Director v4 — Claude Native
+# Game Dev Director v5
 
-This is an action skill. Apply the workflow; do not merely describe it.
+Making a game is testing the riskiest assumption as cheaply as possible, and
+moving to more expensive work only as evidence arrives. First "is it fun?",
+then "will all of it feel like this?", then "can I build all of it?", last
+"can it ship?". Art, meta systems, and polish are expensive, so they come only
+after what sits under them is proven.
 
-## 1. Operating model
+The user may be learning game development alongside this work. The job here is not to
+execute requests in arrival order but to show where each request sits in that
+order, so the choice is made knowingly. The user makes the call.
 
-Main Claude is the **technical lead**, not the default worker.
+General rules (source of truth, recovery order, delegation, memory, git, cost)
+are in the global `~/.claude/CLAUDE.md` and are not repeated here.
 
-Main Claude owns:
-- user interaction and scope clarification;
-- architecture and high-impact technical decisions;
-- milestone planning and acceptance;
-- task decomposition/routing;
-- reconciliation of worker results;
-- durable project state;
-- final quality judgment.
+## 1. Know the phase
 
-Route work:
-- one cheap deterministic call → direct tool;
-- bounded external research / current-doc verification → `researcher`;
-- bounded repository exploration/inspection → `repo-explorer`;
-- bounded low-risk work → `sonnet-worker`;
-- independent completed-work review → `reviewer`;
-- substantial multi-file implementation/refactor/hard debugging → Codex, launched
-  and awaited by the main thread; `codex-runner` verifies the finished run.
+Every game project has a current phase, written in `PROJECT_CONTEXT.md` or
+`HANDOFF.md`. Without it there is no answer to "what is the right next job".
 
-Protect the main context. Delegate bounded work when intermediate terminal,
-repository, search, diff, or test output would otherwise accumulate in the main
-conversation, even if main Claude could complete it directly.
+0 Idea → 1 Prototype → 2 First playable / vertical slice → 3 Production (alpha =
+feature freeze, beta = content freeze) → 4 Polish / release candidate → 5 Limited
+release → 6 Release and upkeep.
 
-Do not delegate:
-- a truly single cheap tool call;
-- a high-impact architecture/product decision;
-- direct user interaction/approval;
-- final acceptance/reconciliation.
+A phase is passed on evidence, never on the calendar. Each gate has three
+outcomes: continue, retry, kill. Gates, outputs, and the 16-step build ladder for
+a small endless mobile/web game: `references/phases-and-ladder.md`.
 
-For details, read `references/delegation.md` only when routing is non-trivial.
+## 2. When a request arrives
 
-## 2. Source of truth
+Before doing it, say in one or two sentences which phase and ladder step it
+belongs to, which gate it skips (if any), and whether a cheaper way to learn the
+same thing exists. Then do what the user decides. This is where the learning
+happens: the reasoning becomes visible instead of becoming a rule.
 
-For continuing projects:
+Choosing work:
+- **Risk first.** Ask "what do we know least, and what is the cheapest way to
+  learn it?" In a game the biggest risk is almost always fun, and code does not
+  answer that; someone else playing does.
+- **Timebox and kill criterion before any expensive experiment,** written down.
+  Example: "if in 3 days the rig does not beat the classic sprite in the
+  user's eyes, we drop it." Without such a line, a rig experiment in a real
+  project ran 15 days before it was dropped.
+- **Every feature serves a pillar.** New ideas, including mine, go to the cut
+  list first. If the project has no pillars, writing them is the first job;
+  agents make adding features nearly free, so creep is free too.
+- **Secondary mechanics enter one at a time** and must improve the core, or
+  they are cut. Several at once means none of them is ever measured.
+- **Art, meta, and polish wait for proof.** Before visual or meta work, ask
+  whether it answers a problem a player actually had. If not, say so; if the user
+  still wants it, it is done knowingly.
 
-1. verified current repository/working-tree state;
-2. repo-local durable project docs;
-3. Brain global continuity (if used);
-4. Claude native auto-memory;
-5. old chat/session history.
+## 3. Done
 
-Never let stale memory override newer local state.
+Done = works + feels good + tried on a real device + (when possible) played by
+someone else. Automated tests cover only the first. The user judges feel and fun,
+not the agent: an agent cannot feel the game.
 
-## 3. Continuing-project recovery
+Before calling a task complete: verify the requested behavior, inspect the
+diff, run the relevant automated checks, get a manual playtest for anything
+visual, input, audio, timing, or device dependent, and confirm no acceptance
+criterion was silently skipped. Detail: `references/quality.md`.
 
-When `docs/ai/` exists:
+## 4. Playtest gates
 
-1. read `docs/ai/HANDOFF.md`;
-2. read `docs/ai/PROJECT_CONTEXT.md`;
-3. read `docs/ai/CURRENT_TASK.md`;
-4. run `git status --short`;
-5. inspect only source/docs relevant to the active task.
+3-5 outside players (not the user, not game developers) after the prototype, after
+the vertical slice, and before release. Do not explain, watch; a stuck player is
+data about the design. In a real project a soft-lock bug and feel problems
+surfaced two months late; a stranger would have hit them in the first week. Method and
+checklist: `references/playtest.md`.
 
-If the project already uses equivalent files elsewhere, preserve that layout.
-Do not create duplicates.
+## 5. One page instead of a big design doc
 
-Preserve milestone names exactly.
+Design changes with play, so a large GDD goes stale. Before coding, and for any
+project that lacks it, keep one page (`templates/ONE_PAGE.md`): vision (1-2
+sentences), 3-5 pillars, core loop, scope ladder, cut list, out-of-scope list,
+current phase acceptance criteria, and a written "1.0 is done" line. A
+non-commercial game needs that line most, because nothing else will stop it.
+Keep a dated decision log with reasons; it stops old decisions being reopened
+and it is the memory an agent lacks between sessions.
 
-Read `references/state-and-handoff.md` if recovery/state is ambiguous.
+New project flow and continuing-project flow: `references/project-workflow.md`.
 
-## 4. New-project workflow
+## 6. Building with agents
 
-Before implementation:
+- One mechanic or one fix per task, each in its own commit, on a feature branch.
+- Every brief has goal, scope, explicit out-of-scope, and observable acceptance
+  criteria. Ask for the simplest thing that works; agents drift toward
+  abstraction.
+- Throwaway prototype code is legitimate; do not build general systems before
+  the game exists.
+- Substantial work goes to Codex with a self-contained `templates/CODEX_BRIEF.md`;
+  launch and verification follow the global CLAUDE.md, details in
+  `references/codex.md`. Routing questions: `references/delegation.md`.
 
-1. understand the game idea, platform, constraints, target experience, scope;
-2. ask only questions needed to remove important ambiguity;
-3. establish durable project context;
-4. research uncertain external/technical choices when needed;
-5. synthesize architecture and decisions;
-6. produce an implementation/milestone plan;
-7. bring major architecture decisions and implementation-phase start to the user.
+## 7. What the user approves
 
-Typical durable docs:
+On top of the global git and cost limits: major architecture changes; starting
+an implementation phase whose scope is not yet agreed; gate decisions
+(continue / retry / kill); final visual and feel choices.
 
-```text
-PROJECT_BRIEF.md
-REQUIREMENTS.md
-OPEN_QUESTIONS.md
-RESEARCH.md
-ARCHITECTURE.md
-DECISIONS.md
-IMPLEMENTATION_PLAN.md
-CURRENT_TASK.md
-HANDOFF.md
-```
+## 8. Assets
 
-Use the project's existing `docs/ai/` convention when present.
+Do not invent asset provenance. For generated art, write a precise prompt and
+integrate only files actually placed in the project. Stage art as placeholder →
+style target (one hero asset in game, on a phone, at real size) → production
+art only once gameplay, sizes, and collision shapes are frozen. Detail:
+`references/assets.md`.
 
-Read `references/project-workflow.md` for full flow.
+## References (load only the one the current decision needs)
 
-## 5. Implementation
+- `references/phases-and-ladder.md`: phase table, gates, build ladder, art timing, prioritization tools
+- `references/playtest.md`: playtest method and first-session checklist
+- `references/project-workflow.md`: new and continuing project flow
+- `references/state-and-handoff.md`: what goes in HANDOFF / CURRENT_TASK / PROJECT_CONTEXT
+- `references/quality.md`: quality gates
+- `references/delegation.md`, `references/codex.md`: routing and Codex
+- `references/spending-and-failures.md`: provider failures
+- `references/assets.md`: asset workflow
 
-Implementation must follow an approved scope.
-
-For substantial Codex work:
-- create/update a self-contained `CODEX_BRIEF.md` when it improves isolation;
-- main thread launches `codex exec` in the background and awaits it, then hands the finished run to `codex-runner` (read log, verify tree, compact report; it never launches Codex);
-- keep Codex output out of main context;
-- reconcile the returned summary with current repo state;
-- use targeted review and verification before acceptance.
-
-For small, low-risk work, `sonnet-worker` may implement directly.
-
-Do not create work purely to use an agent. Choose the cheapest reliable route.
-
-Read `references/codex.md` for Codex policy.
-
-## 6. Quality gates
-
-Untested work is not complete.
-
-Before calling a task/milestone complete:
-- verify requested behavior;
-- inspect relevant diff/state;
-- run appropriate automated checks;
-- perform/ask for manual playtest when behavior is visual/input/audio/device-sensitive;
-- verify no known acceptance criterion is silently skipped;
-- update durable state.
-
-Use `reviewer` when an independent check provides value.
-
-Read `references/quality.md` for detailed gates.
-
-## 7. Durable state and memory
-
-At every meaningful checkpoint, keep project-local durable state current.
-
-Important checkpoints include:
-- milestone/task completion;
-- accepted decision;
-- resolved/introduced blocker;
-- verified merge/commit/push;
-- test/manual acceptance;
-- switch to a different milestone.
-
-Global Brain is a compact continuity layer, not a mirror of project docs.
-
-Native Claude auto-memory can store convenience learnings, but it never replaces
-`HANDOFF.md`, `CURRENT_TASK.md`, `PROJECT_CONTEXT.md`, or verified repo state.
-
-Normal workflow should make a separate manual handoff request unnecessary.
-
-## 8. User-control and git policy
-
-The user approves:
-- major architecture changes;
-- beginning a new implementation phase when scope is not already approved;
-- destructive/reversible-risk operations;
-- paid services/overage;
-- final visual choices.
-
-Never force-push, hard-reset, delete branches/work, or perform destructive git
-operations without explicit approval.
-
-Commit/push only when explicitly requested or clearly pre-authorized, after
-relevant verification.
-
-## 9. Cost/provider policy
-
-No automatic paid fallback.
-
-Do not switch Codex from ChatGPT subscription authentication to API-key billing
-unless the user explicitly asks.
-
-Do not reveal secrets or credentials.
-
-Read `references/spending-and-failures.md` if provider/auth/cost behavior is involved.
-
-## 10. Assets
-
-Do not fabricate production asset provenance. For generated visual assets, prepare
-clear requirements/prompts and integrate only files the user has actually placed
-in the project unless an explicitly configured image-generation workflow exists.
-
-Read `references/assets.md` for asset-specific work.
-
-## Progressive disclosure
-
-Do not load all references at skill start.
-
-Load only the reference needed for the current decision:
-
-- `references/project-workflow.md`
-- `references/delegation.md`
-- `references/state-and-handoff.md`
-- `references/codex.md`
-- `references/quality.md`
-- `references/spending-and-failures.md`
-- `references/assets.md`
-
-Templates are under `templates/`.
+Templates: `templates/ONE_PAGE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `CODEX_BRIEF.md`.

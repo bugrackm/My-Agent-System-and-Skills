@@ -1,6 +1,7 @@
 # <Project> — Handoff
 
 ## Last verified checkpoint
+- Phase:
 - Milestone:
 - Status:
 - Branch/commit:

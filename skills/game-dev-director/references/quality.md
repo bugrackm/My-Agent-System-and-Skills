@@ -33,4 +33,7 @@ Apply the smallest relevant set of gates:
    - CURRENT_TASK/HANDOFF updated;
    - blocker/decision docs updated where relevant.
 
+For games, done also means it feels good, it was tried on a real device, and
+(when possible) someone other than the user played it. The user judges feel.
+
 Report what was actually verified. Never imply a manual test happened when it did not.

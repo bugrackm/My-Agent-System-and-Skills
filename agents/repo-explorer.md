@@ -4,6 +4,7 @@ description: Use for bounded repository exploration, git/diff inspection, file d
 model: sonnet
 effort: medium
 disallowedTools: Write, Edit
+omitClaudeMd: true
 maxTurns: 12
 ---
 
@@ -21,5 +22,6 @@ Rules:
   - evidence/path;
   - risk/uncertainty;
   - recommended next check, if any.
+- Never print secrets, tokens, or credential file contents.
 - Do not paste long logs or diffs back to the parent unless a short excerpt is
   required as evidence.

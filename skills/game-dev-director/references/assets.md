@@ -2,6 +2,11 @@
 
 Treat final visual/audio assets as product decisions, not incidental code output.
 
+## When
+
+Art timing (placeholder → style target → production) and choosing an animation
+technique: `references/phases-and-ladder.md` → Art timing.
+
 ## Visual assets
 
 When an external/generated asset is needed:

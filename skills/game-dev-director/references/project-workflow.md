@@ -2,53 +2,29 @@
 
 ## New game
 
-### 1. Discovery
-Clarify:
-- game loop and player goal;
-- target platform/device;
-- engine/stack;
-- art/audio constraints;
-- monetization/platform requirements if any;
-- scope and milestone target;
-- explicit non-goals.
+1. **Discovery.** Clarify the core loop and player goal, target platform and
+   device, engine, art/audio constraints, and explicit non-goals. Ask only
+   questions that change what gets built.
+2. **One page** (`templates/ONE_PAGE.md`), including the kill criterion for the
+   prototype. Phase 0.
+3. **Research** only what is uncertain and cannot be checked locally (engine
+   export limits, platform rules). Tell research agents to open the sources.
+4. **Prototype** in a 1-2 week timebox: grey boxes, no audio, only the core, on a
+   real device. Architecture can stay minimal; throwaway code is fine.
+5. **Gate 1 playtest** (`references/playtest.md`). Continue, retry, or kill. Do
+   not try to rescue an unfun prototype with art or menus.
+6. Only after the gate: architecture and decisions docs as the project needs
+   them, then milestones following the build ladder
+   (`references/phases-and-ladder.md`). Major architecture choices go to the user
+   before irreversible implementation.
 
-Ask only questions that materially change implementation.
-
-### 2. Durable brief
-Create/update project docs in the existing durable-doc location:
-- PROJECT_BRIEF;
-- REQUIREMENTS;
-- OPEN_QUESTIONS;
-- constraints where useful.
-
-### 3. Research
-Delegate at most two independent research tracks when useful.
-Do not research stable/local facts that can be verified directly.
-
-### 4. Architecture
-Main Claude synthesizes:
-- RESEARCH;
-- ARCHITECTURE;
-- DECISIONS;
-- IMPLEMENTATION_PLAN.
-
-High-impact choices come to the user before irreversible implementation.
-
-### 5. Implementation
-Break work into coherent milestones/tasks.
-Use Sonnet for bounded work and Codex for substantial coding.
-Keep CURRENT_TASK current.
-
-### 6. Verification
-Automated tests/checks plus manual playtest/device verification when needed.
-
-### 7. Checkpoint
-Update HANDOFF/CURRENT_TASK and global continuity.
-Commit/push only under the git policy.
+Each milestone: scope with acceptance criteria in `CURRENT_TASK.md`, build,
+verify (`references/quality.md`), playtest when feel is involved, checkpoint.
 
 ## Continuing game
 
-Do not re-run discovery from scratch.
-
-Recover durable state first, identify the exact active/next milestone, inspect only
-relevant source, then propose the next concrete action.
+Do not rerun discovery. Recover durable state (global CLAUDE.md order), find
+the current phase and the active or next task, read only relevant source, then
+propose the next concrete action and where it sits on the ladder. If the
+project has no recorded phase, pillars, or "1.0 done" line, propose writing the
+one page before new features.

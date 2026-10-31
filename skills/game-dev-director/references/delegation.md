@@ -1,101 +1,25 @@
-# Delegation and Main-Context Preservation
+# Delegation in Game Projects
 
-## Goal
+The routing rules are in the global CLAUDE.md. This page only adds what tends
+to come up in game work.
 
-Preserve the main Opus context for technical leadership, architecture, synthesis,
-acceptance, and user decisions.
+- Most game decisions need the conversation: what is fun, what to cut, which
+  gate we are at. Keep them in the main thread.
+- Good delegation targets: a Godot or engine API check (`researcher`, told to
+  open the docs); locating where a mechanic lives across scenes and scripts
+  (`repo-explorer`); an independent review of a finished feature branch
+  (`reviewer`); a routine export or config change (`sonnet-worker`); a
+  multi-file mechanic implementation or hard bug (Codex, launched by the main
+  thread, verified by `codex-runner`).
+- Do not delegate feel. An agent cannot judge whether a jump feels good; that
+  needs the user on a device.
+- No overlapping writers: never two Codex runs or a Codex run and a
+  `sonnet-worker` on the same files at once.
 
-A task being "easy enough for the parent" is not by itself a reason to keep it in
-the main context.
+## Brief contract
 
-Prefer delegation when a bounded task would otherwise consume main-model context
-with intermediate terminal, repository, diff, search, or verification output.
-
-## Routing
-
-### Direct main tool
-
-Use when:
-- it is a single cheap deterministic call;
-- the result is immediately needed for a high-level decision;
-- delegation setup costs more than execution.
-
-Examples:
-- read one short file;
-- check one known value;
-- one concise `git status --short`.
-
-### `researcher` — Sonnet, external research
-
-Use for:
-- current technical documentation;
-- API/tool/provider verification;
-- technical comparisons;
-- bounded external research;
-- evidence gathering before a main-model decision.
-
-Keep raw browsing/search output in the worker context. Return only the evidence and
-decision-relevant synthesis.
-
-### `repo-explorer` — Sonnet, read-only
-
-Use for:
-- focused repo exploration;
-- bounded git/diff inspection;
-- file-group checks;
-- generated-file verification;
-- locating implementation points;
-- bounded investigation.
-
-### `sonnet-worker` — Sonnet, bounded write
-
-Use for:
-- small low-risk edits;
-- simple wiring/config changes;
-- narrow bug fixes;
-- routine validation with interpretation;
-- bounded commit/push operation after explicit authorization.
-
-Escalate if architecture/scope changes.
-
-### `reviewer` — Sonnet, read-only
-
-Use for:
-- independent review of a completed artifact/change;
-- broad diff review whose details should stay out of main context;
-- security/reliability/performance regression checks.
-
-### Codex CLI (main thread) → `codex-runner` (verification)
-
-Use for:
-- substantial multi-file implementation;
-- refactors;
-- difficult debugging;
-- test-heavy changes;
-- complex implementation where a coding specialist has leverage.
-
-Launch rule: the main thread writes the brief, launches `codex exec`
-(e.g. `codex exec -s workspace-write -C <repo> -o <last-message-file> "<brief>"`)
-in the background and awaits it; when it finishes, `codex-runner` reads the log,
-verifies the working tree, runs checks and returns a compact report.
-`codex-runner` never launches Codex.
-
-## Concurrency
-
-Avoid uncontrolled parallelism.
-
-Default:
-- up to two independent Claude subagent tasks at once;
-- avoid multiple Codex writers touching overlapping files;
-- parallelize only clearly independent scopes.
-
-## Return contract
-
-Workers should return compact summaries, not raw transcripts:
-- status;
-- evidence/files;
-- verification;
-- unresolved question/risk;
-- decision needed.
-
-Main Claude reconciles and decides.
+Every brief states goal, scope, out-of-scope, the files or docs to start from,
+acceptance checks, git permission (none unless the user authorized it), and what
+to return: status, evidence, verification, open risks, decision needed. Workers
+return summaries, not transcripts. Read-only agents do not load CLAUDE.md, so
+restate any rule they need.

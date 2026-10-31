@@ -4,21 +4,17 @@ Codex is a coding specialist, not the project manager.
 
 ## Authentication
 
-Use the user's existing Codex/ChatGPT subscription authentication.
-
-Never:
-- create/use an OpenAI API key for this workflow without explicit user request;
-- switch billing/auth mode silently;
-- expose auth files/tokens.
+Subscription auth only; billing and secret rules are in the global CLAUDE.md.
 
 ## Invocation
 
-Launch rule: the main thread writes the brief, launches `codex exec`
-(e.g. `codex exec -s workspace-write -C <repo> -o <last-message-file> "<brief>"`)
-in the background and awaits it; when it finishes, `codex-runner` reads the log,
-verifies the working tree, runs checks and returns a compact report.
-`codex-runner` never launches Codex.
-This keeps Codex transcript/tool output out of main Opus context.
+The main thread launches `codex exec` (in the background, e.g.
+`codex exec -s workspace-write -C <repo> -o <last-message-file> "<brief>"`) and
+awaits it. Never
+delegate the launch to a subagent: a subagent cannot outlive its own turn, so a
+long Codex run dies or is lost with it. When the run finishes, hand the log and
+working tree to `codex-runner`, which verifies and returns a compact report so
+Codex transcript/tool output does not fill main Opus context.
 
 Before first use on a machine/version, the main thread may inspect:
 

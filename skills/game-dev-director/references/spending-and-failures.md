@@ -1,25 +1,10 @@
 # Spending, Providers, and Failure Handling
 
-## Cost boundary
+## Cost and authentication
 
-Default is zero surprise overage.
-
-Do not:
-- enable automatic paid fallback;
-- enable automatic balance top-up;
-- switch to an API-key billed provider;
-- add paid third-party services;
-- consume paid image/API credits
-
-without explicit user approval.
-
-## Authentication
-
-Do not display or copy secret/token content.
-Inspect only enough metadata/status to verify the intended auth path.
-
-Codex should use the user's existing ChatGPT subscription authentication unless
-explicitly changed by the user.
+The limits (no paid services, credits, top-ups, fallback, or API-key billing
+without the user's approval; no secrets in output) are in the global CLAUDE.md.
+When checking an auth path, inspect only enough metadata/status to verify it.
 
 ## Failure handling
 

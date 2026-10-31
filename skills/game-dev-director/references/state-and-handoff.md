@@ -4,35 +4,20 @@
 
 Project-local durable docs are the technical source of truth.
 
-The brain is cross-project/global continuity and must stay compact.
+The Brain vault (if used) is cross-project/global continuity and must stay compact.
 
-Never copy large project docs into the brain.
+Never copy large project docs into it.
 
-## Continuing-project recovery
+## Conflicts
 
-Preferred `docs/ai/` order:
-
-1. `HANDOFF.md`
-2. `PROJECT_CONTEXT.md`
-3. `CURRENT_TASK.md`
-4. `git status --short`
-5. relevant source files only
-
-Use current local repo state to resolve conflicts. If global memory says M2 but
-the repo-local handoff says M3 and git supports it, M3 wins.
+Recovery order and source-of-truth priority are in the global CLAUDE.md. Use
+current local repo state to resolve conflicts: if global memory says M2 but the
+repo-local handoff says M3 and git supports it, M3 wins.
 
 ## When to update
 
-Update project durable state after:
-- completed/accepted task;
-- milestone checkpoint;
-- important decision;
-- blocker change;
-- tests/manual acceptance;
-- commit/merge/push that changes recovery point;
-- before switching milestones.
-
-Do not wait until the session is almost dead if a checkpoint has already occurred.
+At every checkpoint listed in the global CLAUDE.md. Do not wait until the
+session is almost dead if a checkpoint has already occurred.
 
 ## HANDOFF.md
 
@@ -44,11 +29,12 @@ Keep it concise and operational:
 - current blockers/risks;
 - exact next milestone/task.
 
-It is not a transcript.
+It is not a transcript. Keep only the last one or two sessions; move older
+entries to `docs/ai/archive/`. It is read at every session start.
 
 ## CURRENT_TASK.md
 
-Represent only the active task:
+Represent only the active task (finished-task logs go to `docs/ai/archive/`):
 - goal;
 - scope;
 - acceptance criteria;
@@ -59,25 +45,11 @@ Represent only the active task:
 ## PROJECT_CONTEXT.md
 
 Stable project identity, stack, architecture constraints, target platforms, and
-workflow assumptions. Do not rewrite it every session.
+workflow assumptions. Do not rewrite it every session, but update it when the
+platform, stack, or project stage changes; a stale one misleads every recovery.
 
-## Brain global update
+## Brain and native memory
 
-`LAST_SESSION.md` should be a bridge, not a duplicate:
-- project name/path;
-- current verified checkpoint;
-- next action;
-- pointer to repo-local durable state.
-
-`THREADS.md` tracks ongoing cross-session threads/status.
-
-`JOURNAL.md` records only meaningful developments.
-
-## Native Claude auto-memory
-
-Allowed for convenience facts such as:
-- build/test commands;
-- recurring debugging patterns;
-- local tooling quirks.
-
-It must not override project durable state.
+If the Brain is installed, its format (`LAST_SESSION.md`, `THREADS.md`, `JOURNAL.md`) is owned by
+`memory-keeper` and defined in `$BRAIN_HOME/850-Memory/MEMORY_PROTOCOL.md`.
+Native Claude auto-memory never overrides project durable state.
