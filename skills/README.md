@@ -11,19 +11,19 @@ Skill, Claude Code'a belirli bir iş türü için hazır talimatlar veren bir kl
 
 ## game-dev-director
 
-Yeni ya da devam eden bir oyun projesinde Claude'u **teknik lider** gibi çalıştırır (v5). Temeli bir oyun geliştirme kılavuzu: riskli varsayımı en ucuz yoldan test et, daha pahalı işe ancak kanıt geldikçe geç. Önce "eğlenceli mi?", sanat, meta ve cila en son.
-- **Aşama ve kapı:** proje hangi aşamada (fikir, prototip, dikey dilim, üretim, cila, sınırlı yayın, bakım) bilinir. Bir aşamadan çıkış takvimle değil kanıtla olur: devam, tekrar dene ya da öldür.
-- **İstek gelince:** Claude önce isteğin özellik sırasında nereye düştüğünü, hangi kapıyı atladığını ve daha ucuz bir öğrenme yolu olup olmadığını söyler. Karar kullanıcının.
-- **Kapsam:** pahalı denemeye zaman kutusu ve öldürme ölçütü; her özellik bir ana ilkeye (pillar) hizmet eder; yeni fikirler önce kesme listesine; ikincil mekanikler tek tek.
-- **"Bitti":** çalışıyor + iyi hissettiriyor + gerçek cihazda denendi + başkası oynadı. Playtest kapıları ve kontrol listesi dahil.
-- **Proje kurtarma ve durum takibi:** `docs/ai/` dosyalarından kaldığı yeri bulur, her checkpoint'te günceller.
+Yeni ya da devam eden bir oyun projesinde Claude'u **teknik lider** gibi çalıştırır (v6.1). Kontrol listesi değil, karar vermeye yardım eden kısa notlardan oluşur.
+- **Harita:** önce en ucuz risk: "eğlenceli mi?" → "hepsi böyle hissettirecek mi?" → "hepsini yapabilir miyim?" → "yayınlanabilir mi?". Sanat, meta ve ağır cila, temel kanıtlandıktan sonra en çok işe yarar. Bir istek bu sırayı atlıyorsa Claude bunu bir cümleyle söyler ve kararı sana bırakır. Sıradan isteklere tören eklemez.
+- **İşi yapma:** kök nedeni düzelt; girdi, mantık, görsel ve sesi birlikte ele alan, oynanıp değerlendirilebilen dilimler. Atılabilir prototip kodu serbest, oyunun ihtiyacından önce genel sistem yazılmaz.
+- **"Bitti":** çalışıyor, ilgili otomatik kontrollerden geçti, diff incelendi. His, girdi, ses, zamanlama ve görsellik söz konusuysa sen de oynadın; agent hissi değerlendiremez.
+- **Playtest:** prototipten sonra, dikey dilimden sonra ve yayından önce 3-5 dış oyuncu. Anlatma, izle.
+- **Godot web tuzakları (Gotchas):** Godot 4.7 belgeleri ve kaynak koduyla kontrol edilmiş, makul bir varsayıma ters düşen gerçekler. Örnek: web'de ivmeölçer sıfır döner; varsayılan "Sample" ses modu anlık ses üretimini desteklemez; havuzunda tek ses olan `AudioStreamRandomizer` hep aynı sesi çalar.
 
 Klasör yapısı:
 - `SKILL.md`: ana iş akışı.
-- `references/`: phases-and-ladder (aşamalar, kapılar, 16 basamaklı özellik sırası, sanatın zamanı), playtest, project-workflow, state-and-handoff, quality, delegation, codex, assets, spending-and-failures. Claude bunları yalnızca gerektiğinde okur.
+- `references/`: phases-and-ladder (aşamalar, kapılar, özellik sırası, sanatın zamanı), playtest, assets, codex. Claude bunları yalnızca gerektiğinde okur.
 - `templates/`: `ONE_PAGE.md` (vizyon, ana ilkeler, kesme listesi, "1.0 bitti" tanımı), `HANDOFF.md`, `CURRENT_TASK.md` ve `CODEX_BRIEF.md`.
 
-Genel kurallar (kaynak önceliği, devretme, git, maliyet) skill'de tekrarlanmaz, global `CLAUDE.md`'de durur ([`agents/CLAUDE.md.template`](../agents/CLAUDE.md.template)).
+Genel kurallar (rol, kaynak önceliği, proje kurtarma, durum dosyaları, devretme, git, maliyet, doğrulama raporu) skill'de tekrarlanmaz, global `CLAUDE.md`'de durur ([`agents/CLAUDE.md.template`](../agents/CLAUDE.md.template)). v5'teki `project-workflow`, `state-and-handoff`, `quality`, `delegation` ve `spending-and-failures` referansları bu yüzden kaldırıldı. Kendi `CLAUDE.md`'n varsa template'teki "Projects and source of truth", "Durable state" ve "Delegation" bölümlerinin karşılığı olduğundan emin ol.
 
 [`agents/`](../agents/) altındaki agent'larla birlikte kullanınca en iyi sonucu verir, ama tek başına da çalışır.
 
@@ -52,19 +52,19 @@ A skill is a folder that gives Claude Code ready-made instructions for a particu
 
 ### game-dev-director
 
-Makes Claude act as **technical lead** on a new or continuing game project (v5). Its core is a game-development playbook: test the riskiest assumption as cheaply as possible and move to more expensive work only as evidence arrives. "Is it fun?" first; art, meta and polish last.
-- **Phase and gate:** the project's phase is known (idea, prototype, vertical slice, production, polish, limited release, upkeep). A phase is left on evidence, not on the calendar: continue, retry or kill.
-- **When a request arrives:** Claude first says where it sits in the build order, which gate it skips, and whether a cheaper way to learn exists. The user decides.
-- **Scope:** a timebox and kill criterion for expensive experiments; every feature serves a pillar; new ideas go to the cut list first; secondary mechanics one at a time.
-- **Done:** works + feels good + tried on a real device + played by someone else. Playtest gates and checklist included.
-- **Project recovery and state tracking:** finds where you left off from `docs/ai/` and updates it at every checkpoint.
+Makes Claude act as **technical lead** on a new or continuing game project (v6.1). It is a set of short judgment aids, not a checklist.
+- **Map:** cheapest risk first: "is it fun?" → "will all of it feel like this?" → "can I build all of it?" → "can it ship?". Art, meta and heavy polish pay off most once the core is proven. When a request skips that order, Claude says so in a sentence and leaves the call to you. Ordinary requests get no extra ceremony.
+- **Doing the work:** fix root causes; build slices that touch input, logic, visuals and sound together so they can be played and judged. Throwaway prototype code is fine; general systems before the game needs them are not.
+- **Done:** works, passes the relevant automated checks, diff reviewed, and for anything about feel, input, audio, timing or visuals, you have played it. An agent cannot judge feel.
+- **Playtests:** 3-5 outside players after the prototype, after the vertical slice and before release. Watch, don't explain.
+- **Godot web gotchas:** facts checked against the Godot 4.7 docs and source that break a reasonable assumption. For example: the accelerometer returns zero on web; the default "Sample" audio mode cannot generate audio at runtime; an `AudioStreamRandomizer` with one stream always plays that stream.
 
 Folder layout:
 - `SKILL.md`: the main workflow.
-- `references/`: phases-and-ladder (phases, gates, 16-step build ladder, art timing), playtest, project-workflow, state-and-handoff, quality, delegation, codex, assets, spending-and-failures. Claude reads them only when needed.
+- `references/`: phases-and-ladder (phases, gates, build ladder, art timing), playtest, assets, codex. Claude reads them only when needed.
 - `templates/`: `ONE_PAGE.md` (vision, pillars, cut list, "1.0 is done" line), `HANDOFF.md`, `CURRENT_TASK.md` and `CODEX_BRIEF.md`.
 
-General rules (source of truth, delegation, git, cost) are not repeated in the skill; they live in the global `CLAUDE.md` ([`agents/CLAUDE.md.template`](../agents/CLAUDE.md.template)).
+General rules (role, source of truth, project recovery, state files, delegation, git, cost, verification reporting) are not repeated in the skill; they live in the global `CLAUDE.md` ([`agents/CLAUDE.md.template`](../agents/CLAUDE.md.template)). That is why v5's `project-workflow`, `state-and-handoff`, `quality`, `delegation` and `spending-and-failures` references were removed. If you keep your own `CLAUDE.md`, make sure it covers the template's "Projects and source of truth", "Durable state" and "Delegation" sections.
 
 It works best together with the agents in [`agents/`](../agents/), but it also works on its own.
 

@@ -1,129 +1,103 @@
 ---
 name: game-dev-director
-description: Technical-lead workflow for new or continuing game projects. Use when choosing what to build next, placing a feature request in the right development phase, scoping or planning a milestone, setting up a prototype, playtest, or one-page design doc, deciding when art/meta/polish should come, delegating game implementation, reviewing or accepting game work, or recovering a game project's state.
-compatibility: Claude Code with git. Codex CLI is optional for substantial implementation.
+description: Technical-lead workflow for new or continuing game projects. Use when choosing what to build next, scoping or planning a feature or milestone, setting up a prototype or playtest, deciding when art/meta/polish should come, implementing or reviewing game work (including Godot web export issues), or recovering a game project's state.
+compatibility: Claude Code with git. Codex CLI is optional.
 metadata:
-  version: "5.0"
+  version: "6.1"
 ---
 
-# Game Dev Director v5
+# Game Dev Director v6.1
 
-Making a game is testing the riskiest assumption as cheaply as possible, and
-moving to more expensive work only as evidence arrives. First "is it fun?",
-then "will all of it feel like this?", then "can I build all of it?", last
-"can it ship?". Art, meta systems, and polish are expensive, so they come only
-after what sits under them is proven.
+These notes are judgment aids for game work, not checklists. General rules
+(role, source of truth, delegation, git, cost, memory, verification reporting) live in the
+global `~/.claude/CLAUDE.md` and are not repeated here.
 
-The user may be learning game development alongside this work. The job here is not to
-execute requests in arrival order but to show where each request sits in that
-order, so the choice is made knowingly. The user makes the call.
+## How games get made (use as a map)
 
-General rules (source of truth, recovery order, delegation, memory, git, cost)
-are in the global `~/.claude/CLAUDE.md` and are not repeated here.
+Cheapest risk first: "is it fun?" → "will all of it feel like this?" → "can I
+build all of it?" → "can it ship?". Art, meta, and heavy polish are expensive to
+redo, so they pay off most once the core is proven. When a request clearly
+skips something that would change its value (e.g. production art before the
+action set is settled), say so in a sentence and continue with what the user
+decides. Don't add ceremony to ordinary requests.
 
-## 1. Know the phase
+Phases, gates, build ladder, art timing: `references/phases-and-ladder.md`.
 
-Every game project has a current phase, written in `PROJECT_CONTEXT.md` or
-`HANDOFF.md`. Without it there is no answer to "what is the right next job".
+Useful habits, not mandates:
+- For big uncertain experiments (a rig, a new art pipeline), agree on a rough
+  timebox and what would make us drop it. A rig experiment in a real project
+  ran 15 days without one.
+- Measure secondary mechanics: adding several at once makes it hard to tell
+  which one helped.
+- Prefer playtest evidence over guesses when choosing what to fix.
 
-0 Idea → 1 Prototype → 2 First playable / vertical slice → 3 Production (alpha =
-feature freeze, beta = content freeze) → 4 Polish / release candidate → 5 Limited
-release → 6 Release and upkeep.
+## Doing the work
 
-A phase is passed on evidence, never on the calendar. Each gate has three
-outcomes: continue, retry, kill. Gates, outputs, and the 16-step build ladder for
-a small endless mobile/web game: `references/phases-and-ladder.md`.
+- Fix root causes. Refactor when it makes the change clean; don't stack hacks
+  to keep a diff small. Keep unrelated behavior intact.
+- Work in slices that touch input + logic + visuals + sound as needed, so the
+  result can be played and judged.
+- Throwaway prototype code is fine; general systems before the game needs them are not.
+- Codex (`references/codex.md`) is an option for large, well-specified,
+  self-contained work.
 
-## 2. When a request arrives
+## Gotchas (Godot 4 web export)
 
-Before doing it, say in one or two sentences which phase and ladder step it
-belongs to, which gate it skips (if any), and whether a cheaper way to learn the
-same thing exists. Then do what the user decides. This is where the learning
-happens: the reasoning becomes visible instead of becoming a rule.
+Checked against Godot 4.6-4.7 docs, source and issue tracker (2026-11). Each one
+breaks a reasonable assumption:
+- `Input.get_accelerometer()` returns `Vector3.ZERO` on web (and on Android unless
+  `input_devices/sensors/enable_accelerometer` is on). Browser tilt needs a JS
+  `devicemotion` bridge into `Input.set_accelerometer()` plus an iOS permission
+  tap over HTTPS (bridge untested), or a non-tilt control.
+- Web audio defaults to "Sample" playback: no bus effects and no procedural
+  audio generation (so no `AudioStreamGenerator`). Render procedural SFX
+  offline to WAV; "Stream" mode allows effects at the cost of latency and
+  possible crackling (that docs page is marked experimental).
+- `AudioStreamRandomizer` with one stream always plays that stream; give it 3+
+  variants. It may also skip the Sample path on web (source reading, untested);
+  randomizing `pitch_scale` in code is likely safer. Test in a real browser.
+- iOS Safari + Sample mode has an open crash report (godot#116750: crash after
+  10-30 min of repeated `play()`, reported on 4.5.1, unconfirmed on 4.7); check
+  its status before shipping long iOS sessions.
 
-Choosing work:
-- **Risk first.** Ask "what do we know least, and what is the cheapest way to
-  learn it?" In a game the biggest risk is almost always fun, and code does not
-  answer that; someone else playing does.
-- **Timebox and kill criterion before any expensive experiment,** written down.
-  Example: "if in 3 days the rig does not beat the classic sprite in the
-  user's eyes, we drop it." Without such a line, a rig experiment in a real
-  project ran 15 days before it was dropped.
-- **Every feature serves a pillar.** New ideas, including mine, go to the cut
-  list first. If the project has no pillars, writing them is the first job;
-  agents make adding features nearly free, so creep is free too.
-- **Secondary mechanics enter one at a time** and must improve the core, or
-  they are cut. Several at once means none of them is ever measured.
-- **Art, meta, and polish wait for proof.** Before visual or meta work, ask
-  whether it answers a problem a player actually had. If not, say so; if the user
-  still wants it, it is done knowingly.
+Check first (documented risk, not measured in practice):
+- Web uses the Compatibility renderer, which has no shader precompile: the first
+  use of an effect can hitch, so show effects once during loading.
+- Physics ticks at 60 Hz by default; on 120 Hz phones physics-driven motion can judder.
+  2D physics interpolation smooths it (slight latency; reset after teleports).
 
-## 3. Done
+Project-specific quirks belong in that project's CLAUDE.md, not here.
 
-Done = works + feels good + tried on a real device + (when possible) played by
-someone else. Automated tests cover only the first. The user judges feel and fun,
-not the agent: an agent cannot feel the game.
+## Done
 
-Before calling a task complete: verify the requested behavior, inspect the
-diff, run the relevant automated checks, get a manual playtest for anything
-visual, input, audio, timing, or device dependent, and confirm no acceptance
-criterion was silently skipped. Detail: `references/quality.md`.
+Works, verified with the relevant automated/headless checks, diff reviewed, and
+for anything about feel, input, audio, timing, visuals, or device behavior,
+the user has played it. An agent cannot judge feel.
 
-## 4. Playtest gates
+## Playtests
 
-3-5 outside players (not the user, not game developers) after the prototype, after
-the vertical slice, and before release. Do not explain, watch; a stuck player is
-data about the design. In a real project a soft-lock bug and feel problems
-surfaced two months late; a stranger would have hit them in the first week. Method and
-checklist: `references/playtest.md`.
+The maker cannot see the game's problems. 3-5 outside players after the
+prototype, after the vertical slice, and before release; watch, don't explain.
+Method: `references/playtest.md`.
 
-## 5. One page instead of a big design doc
+## Design doc
 
-Design changes with play, so a large GDD goes stale. Before coding, and for any
-project that lacks it, keep one page (`templates/ONE_PAGE.md`): vision (1-2
-sentences), 3-5 pillars, core loop, scope ladder, cut list, out-of-scope list,
-current phase acceptance criteria, and a written "1.0 is done" line. A
-non-commercial game needs that line most, because nothing else will stop it.
-Keep a dated decision log with reasons; it stops old decisions being reopened
-and it is the memory an agent lacks between sessions.
+One page beats a big GDD (`templates/ONE_PAGE.md`): vision, pillars, core loop,
+cut list, "1.0 is done" line. Keep a dated decision log with reasons so old
+decisions are not reopened without new evidence.
 
-New project flow and continuing-project flow: `references/project-workflow.md`.
+## The user decides
 
-## 6. Building with agents
+Large new features or direction changes (agree scope briefly first), major
+architecture changes, continue/drop calls on experiments, final visual and feel
+choices. Small fixes and improvements inside an agreed task go ahead.
 
-- One mechanic or one fix per task, each in its own commit, on a feature branch.
-- Every brief has goal, scope, explicit out-of-scope, and observable acceptance
-  criteria. Ask for the simplest thing that works; agents drift toward
-  abstraction.
-- Throwaway prototype code is legitimate; do not build general systems before
-  the game exists.
-- Substantial work goes to Codex with a self-contained `templates/CODEX_BRIEF.md`;
-  launch and verification follow the global CLAUDE.md, details in
-  `references/codex.md`. Routing questions: `references/delegation.md`.
+## Assets
 
-## 7. What the user approves
+Never invent asset provenance; integrate only files actually in the project.
+Details: `references/assets.md`.
 
-On top of the global git and cost limits: major architecture changes; starting
-an implementation phase whose scope is not yet agreed; gate decisions
-(continue / retry / kill); final visual and feel choices.
+## Files
 
-## 8. Assets
-
-Do not invent asset provenance. For generated art, write a precise prompt and
-integrate only files actually placed in the project. Stage art as placeholder →
-style target (one hero asset in game, on a phone, at real size) → production
-art only once gameplay, sizes, and collision shapes are frozen. Detail:
-`references/assets.md`.
-
-## References (load only the one the current decision needs)
-
-- `references/phases-and-ladder.md`: phase table, gates, build ladder, art timing, prioritization tools
-- `references/playtest.md`: playtest method and first-session checklist
-- `references/project-workflow.md`: new and continuing project flow
-- `references/state-and-handoff.md`: what goes in HANDOFF / CURRENT_TASK / PROJECT_CONTEXT
-- `references/quality.md`: quality gates
-- `references/delegation.md`, `references/codex.md`: routing and Codex
-- `references/spending-and-failures.md`: provider failures
-- `references/assets.md`: asset workflow
-
-Templates: `templates/ONE_PAGE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `CODEX_BRIEF.md`.
+- `references/phases-and-ladder.md`, `references/playtest.md`, `references/assets.md`, `references/codex.md`
+- `templates/ONE_PAGE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `CODEX_BRIEF.md`

@@ -4,6 +4,7 @@ Sources: Chandler (The Game Production Handbook), Schell (The Art of Game
 Design), Keith (Agile Game Development), Voodoo/Homa/Supercell practice, Derek
 Yu ("Finishing a Game"), Griesemer (Halo). Each phase
 removes one risk before money and time go into the next, more expensive phase.
+This is a map for judgment, not a checklist to recite on every request.
 
 ## Phases
 
@@ -18,10 +19,9 @@ removes one risk before money and time go into the next, more expensive phase.
 | 5 | Limited release | "Do real players stay?" | Measurement, tuned first minute | Target met, or kill | Share with friends/community, observe |
 | 6 | Release + upkeep | Scale, continuity | Updates | Decision to stop | Optional upkeep and an explicit stop point |
 
-Gate outcomes: continue, retry, kill. A gate passes on evidence, never because
-the time ran out. Write the kill criterion before the phase starts: killing
-early is cheap, finishing a mediocre game is expensive (Supercell killed 30+
-games for 5 hits).
+Gate outcomes: continue, retry, kill. A gate passes on evidence, not because
+the time ran out. Knowing in advance what would make you drop an idea keeps
+killing cheap (Supercell killed 30+ games for 5 hits).
 
 Commercial mobile KPIs (D1 retention ~35-40%+, CPI thresholds) are for
 publishers; for a non-commercial game drop them and ask "do players like it?"

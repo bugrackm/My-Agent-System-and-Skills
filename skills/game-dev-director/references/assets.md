@@ -38,4 +38,4 @@ Check:
 - mobile/browser autoplay/platform constraints;
 - import/compression behavior.
 
-Manual playtest is required for subjective visual/audio acceptance.
+The user judges subjective visual/audio results in play.
